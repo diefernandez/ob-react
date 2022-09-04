@@ -4,6 +4,7 @@ import { Task } from '../../models/task.class'
 import TaskComponent from '../pure/task'
 
 import '../../styles/task.scss'
+import TaskForm from '../pure/forms/task'
 
 const TaskListComponent = () => {
 
@@ -22,8 +23,26 @@ const TaskListComponent = () => {
         }
     }, [tasks])
 
-    const changeCompleted = (id) => {
-        console.log('TODO: Cambiar estado de una tarea')
+    function completeTask(task) {
+        console.log('Complete this task:', task)
+        const index = tasks.indexOf(task)
+        const tempTasks = [ ...tasks ]
+        tempTasks[index].completed = !tempTasks[index].completed
+        setTasks(tempTasks)
+    }
+
+    function removeTask(task) {
+        console.log('Remove this task:', task)
+        const index = tasks.indexOf(task)
+        const tempTasks = [ ...tasks ]
+        tempTasks.splice(index, 1)
+        setTasks(tempTasks)
+    }
+
+    function addTask(task) {
+        console.log('Add this task:', task)
+        const tempTasks = [ ...tasks, task ]
+        setTasks(tempTasks)
     }
 
     return (
@@ -50,7 +69,12 @@ const TaskListComponent = () => {
                             <tbody>
                                 {
                                     tasks.map((task, index) => (
-                                        <TaskComponent task={ task } key={ index }></TaskComponent>
+                                        <TaskComponent 
+                                            task={ task }
+                                            complete={ completeTask }
+                                            remove={ removeTask }
+                                            key={ index }
+                                        ></TaskComponent>
                                     ))
                                 }
                             </tbody>
@@ -58,6 +82,7 @@ const TaskListComponent = () => {
                     </div>
                 </div>
             </div>
+            <TaskForm add={ addTask }></TaskForm>
         </div>
     )
 }
